@@ -6,6 +6,15 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.loc = [
+            0,
+            function() {
+                return ( Math.floor( Math.random() * 4 ) + 1 ) * 83;
+            }()
+        ];
+    this.speed = function() {
+        return Math.floor( Math.random() * 3 ) + 1;
+    }();
 };
 
 // Update the enemy's position, required method for game
@@ -14,17 +23,43 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.loc[0] = (this.loc[0] + this.speed) * dt;
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+var Player = function() {
+    this.sprite = 'images/char-boy.png';
+    this.loc = [202, 415];
+    this.update = function(x, y) {
+        this.loc[0] += x;
+        this.loc[1] += y;
+    };
+    this.render = ;
+    this.handleInput = function(key) {
+        if (key === "left" && this.loc[0] >= 101) {
+            this.update(-100, 0);
+        }
 
+        if (key === "up" && this.loc[1] <= 404) {
+            this.update(0, -100);;
+        }
+
+        if (key === "right") {
+            this.loc[0] = this.loc[0] + 101;
+        }
+
+        if (key === "down") {
+            this.loc[0] = this.loc[0] + 83;
+        }
+    };
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
