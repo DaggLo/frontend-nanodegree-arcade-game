@@ -12,9 +12,11 @@ var Enemy = function() {
                 return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
             }()
         ];
-    this.speed = function() {
-        return (Math.floor( Math.random() * 3 ) + 1) * 100;
-    }();
+    this.speed = this.speedChanger();
+};
+
+Enemy.prototype.speedChanger = function() {
+    return (Math.floor( Math.random() * 3 ) + 1) * 100;
 };
 
 // Update the enemy's position, required method for game
@@ -23,9 +25,11 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    var speed = this.speed;
+
     if (this.loc[0] < 505) {
-	    this.loc[0] += this.speed * dt;
-	
+	    this.loc[0] += speed * dt;
+
 	} else {
 	    this.loc = [
             -101,
@@ -33,7 +37,9 @@ Enemy.prototype.update = function(dt) {
                 return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
             }()
         ];
-	}
+
+        this.speed = this.speedChanger();
+	};
 };
 
 // Draw the enemy on the screen, required method for game
@@ -46,21 +52,21 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-	
+
     this.loc = [202, 404];
-	
+
     this.update = function(x, y) {
         if (x !== undefined && y !== undefined) {
 		    this.loc[0] += x;
             this.loc[1] += y;
-			
+
 		} else return;
     };
-	
+
     this.render = function() {
 	    ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
 	};
-		
+
     this.handleInput = function(key) {
         if (key == "left" && this.loc[0] >= 101) {
             this.update(-101, 0);
@@ -76,7 +82,7 @@ var Player = function() {
 
         if (key == "down" && this.loc[1] <= 330) {
             this.update(0, 83);
-			
+
         } else {
 		    this.update(0, 0);
 		}
