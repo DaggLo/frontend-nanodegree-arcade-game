@@ -179,12 +179,8 @@ var Engine = (function(global) {
      */
     function reset() {
         allEnemies.forEach(function(element) {
-            element.loc = [
-                -101,
-                locInitiator()
-            ];
-			
-			element.speed = speedChanger();
+            element.loc = [-101, randomizer() * 83 - 25];
+			element.speed = randomizer() *100;
         });
 		
 		player.loc = [202, 404];

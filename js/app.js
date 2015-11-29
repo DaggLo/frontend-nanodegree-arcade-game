@@ -6,11 +6,8 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.loc = [
-            -101,
-            locInitiator()
-        ];
-    this.speed = speedChanger();
+    this.loc = [-101, randomizer() * 83 - 25];
+    this.speed = randomizer() *100;
 };
 
 // Update the enemy's position, required method for game
@@ -25,14 +22,8 @@ Enemy.prototype.update = function(dt) {
 	    this.loc[0] += speed * dt;
 
 	} else {
-	    this.loc = [
-            -101,
-            function() {
-                return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
-            }()
-        ];
-
-        this.speed = speedChanger();
+	    this.loc = [-101, randomizer() * 83 - 25];
+        this.speed = randomizer() * 100;
 	};
 };
 
@@ -103,23 +94,6 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-function speedChanger() {
-    return (Math.floor( Math.random() * 3 ) + 1) * 100;
+function randomizer() {
+    return (Math.floor( Math.random() * 3 ) + 1);
 }
-
-function locInitiator() {
-    return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
-}
-
-/* var checkCollisions = function() {
-    for (var key = 0; key < allEnemies.length; key++) {
-	
-        if (allEnemies[key].loc[0] < player.loc[0] + 101 &&
-            allEnemies[key].loc[0] + 101 > player.loc[0] &&
-            allEnemies[key].loc[1] < player.loc[1] + 83 &&
-            allEnemies[key].loc[1] + 83 > player.loc[1]) {
-		        reset();
-		}
-	};
-} */
-        // collision detected!
