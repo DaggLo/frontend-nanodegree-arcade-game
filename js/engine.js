@@ -70,7 +70,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
+        //reset();
         lastTime = Date.now();
         main();
     }
@@ -90,10 +90,10 @@ var Engine = (function(global) {
 		var checkCollisions = function() {
 		    for (var key = 0; key < allEnemies.length; key++) {
 	
-                if (allEnemies[key].loc[0] < player.loc[0] + 101 &&
-                    allEnemies[key].loc[0] + 101 > player.loc[0] &&
-                    allEnemies[key].loc[1] < player.loc[1] + 83 &&
-                    allEnemies[key].loc[1] + 83 > player.loc[1]) {
+                if (allEnemies[key].loc[0] < player.loc[0] + 65 &&
+                    allEnemies[key].loc[0] + 65 > player.loc[0] &&
+                    allEnemies[key].loc[1] < player.loc[1] + 60 &&
+                    allEnemies[key].loc[1] + 60 > player.loc[1]) {
 		            
 					reset();
 		        }
@@ -178,13 +178,13 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        allEnemies.forEach(function(enemy) {
-            this.loc = [
+        allEnemies.forEach(function(element) {
+            element.loc = [
                 -101,
                 locInitiator()
             ];
 			
-			this.speed = speedChanger();
+			element.speed = speedChanger();
         });
 		
 		player.loc = [202, 404];
