@@ -1,4 +1,4 @@
-/* Engine.js
+﻿/* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
  * render methods on your player and enemy objects (defined in your app.js).
@@ -47,6 +47,12 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
+		
+		/* This resets the game when player reaches the water.
+		*/
+		if (player.loc[1] === -11) {
+		    reset();
+		}
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -160,7 +166,16 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        allEnemies.forEach(function(enemy) {
+            enemy.loc = [
+                -101,
+                locInitiator()
+            ];
+			
+			 this.speed = speedChanger();
+        });
+		
+		player.loc = [202, 404];
     }
 
     /* Go ahead and load all of the images we know we're going to need to

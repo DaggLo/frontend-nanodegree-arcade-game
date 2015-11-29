@@ -8,16 +8,18 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     this.loc = [
             -101,
-            function() {
-                return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
-            }()
+            locInitiator()
         ];
-    this.speed = this.speedChanger();
+    this.speed = speedChanger();
 };
 
-Enemy.prototype.speedChanger = function() {
+function speedChanger() {
     return (Math.floor( Math.random() * 3 ) + 1) * 100;
 };
+
+function locInitiator() {
+    return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -38,7 +40,7 @@ Enemy.prototype.update = function(dt) {
             }()
         ];
 
-        this.speed = this.speedChanger();
+        this.speed = speedChanger();
 	};
 };
 
