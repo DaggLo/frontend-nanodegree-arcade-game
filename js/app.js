@@ -13,14 +13,6 @@ var Enemy = function() {
     this.speed = speedChanger();
 };
 
-function speedChanger() {
-    return (Math.floor( Math.random() * 3 ) + 1) * 100;
-};
-
-function locInitiator() {
-    return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
-}
-
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -111,4 +103,23 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-// TODO: https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+function speedChanger() {
+    return (Math.floor( Math.random() * 3 ) + 1) * 100;
+}
+
+function locInitiator() {
+    return ( Math.floor( Math.random() * 3 )  + 1) * 83 - 25;
+}
+
+/* var checkCollisions = function() {
+    for (var key = 0; key < allEnemies.length; key++) {
+	
+        if (allEnemies[key].loc[0] < player.loc[0] + 101 &&
+            allEnemies[key].loc[0] + 101 > player.loc[0] &&
+            allEnemies[key].loc[1] < player.loc[1] + 83 &&
+            allEnemies[key].loc[1] + 83 > player.loc[1]) {
+		        reset();
+		}
+	};
+} */
+        // collision detected!

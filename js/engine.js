@@ -86,8 +86,20 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
-    }
+		
+		var checkCollisions = function() {
+		    for (var key = 0; key < allEnemies.length; key++) {
+	
+                if (allEnemies[key].loc[0] < player.loc[0] + 101 &&
+                    allEnemies[key].loc[0] + 101 > player.loc[0] &&
+                    allEnemies[key].loc[1] < player.loc[1] + 83 &&
+                    allEnemies[key].loc[1] + 83 > player.loc[1]) {
+		            
+					reset();
+		        }
+			}
+		}();
+	}; 
 
     /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
@@ -167,12 +179,12 @@ var Engine = (function(global) {
      */
     function reset() {
         allEnemies.forEach(function(enemy) {
-            enemy.loc = [
+            this.loc = [
                 -101,
                 locInitiator()
             ];
 			
-			 this.speed = speedChanger();
+			this.speed = speedChanger();
         });
 		
 		player.loc = [202, 404];
