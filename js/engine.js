@@ -70,7 +70,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        //reset();
+        reset();
         lastTime = Date.now();
         main();
     }
@@ -85,6 +85,11 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
+	    if (time <= 0) {
+		    reset();
+			player.score = 0;
+		}
+		
         updateEntities(dt);
 		
 		var checkCollisions = function() {
@@ -96,7 +101,20 @@ var Engine = (function(global) {
                     allEnemies[key].loc[1] + 60 > player.loc[1]) {
 		            
 					reset();
+					player.score = 0;
 		        }
+			}
+			
+			for(var key = 0; key < gems.length; key++) {
+			
+			    if (gems[key].loc[0] < player.loc[0] + 65 &&
+                    gems[key].loc[0] + 65 > player.loc[0] &&
+                    gems[key].loc[1] < player.loc[1] + 60 &&
+                    gems[key].loc[1] + 60 > player.loc[1]) {
+					
+					gems[key].loc = [-300, 100];
+					player.score += gems[key].points;
+				}
 			}
 		}();
 	}; 
@@ -112,6 +130,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+		
         player.update();
     }
 
@@ -153,8 +172,9 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
-
+		
+		ctx.clearRect(295, 15, 180, 30);
+		ctx.clearRect(15, 10, 250, 30);
         renderEntities();
     }
 
@@ -171,6 +191,10 @@ var Engine = (function(global) {
         });
 
         player.render();
+		
+		gems.forEach(function(gem) {
+		    gem.render();
+		});
     }
 
     /* This function does nothing but it could have been a good place to
@@ -179,11 +203,15 @@ var Engine = (function(global) {
      */
     function reset() {
         allEnemies.forEach(function(element) {
-            element.loc = [-101, randomizer() * 83 - 25];
-			element.speed = randomizer() *100;
+            element.loc = [-101, randomizer(3, 1) * 83 - 25];
+			element.speed = randomizer(3, 1) *100;
         });
 		
 		player.loc = [202, 404];
+		player.score += 10000;
+		
+		gemSpawn();
+		time = 30;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -195,7 +223,19 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+		'images/gem-blue.png',
+	    'images/gem-green.png',
+		'images/gem-orange.png',
+		'images/Heart.png',
+		'images/Key.png',
+		'images/Star.png',
+		'images/Rock.png',
+		'images/char-boy.png',
+		'images/char-cat-girl.png',
+		'images/char-horn-girl.png',
+		'images/char-pink-girl.png',
+		'images/char-princess-girl.png'
     ]);
     Resources.onReady(init);
 
