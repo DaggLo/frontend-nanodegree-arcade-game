@@ -47,8 +47,8 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
-		
-		/* This resets the game when player reaches the water.
+
+		/* This resets the game when player reaches water.
 		*/
 		if (player.loc[1] === -11) {
 		    reset();
@@ -87,37 +87,40 @@ var Engine = (function(global) {
     function update(dt) {
 	    if (time <= 0) {
 		    reset();
-			player.score = 0;
+			player.score = 0; // Time is up? Scores are gone.
 		}
-		
+
         updateEntities(dt);
-		
+
+        /* This function checks collisions between player and enemies, player
+         * and collectibles.
+         */
 		var checkCollisions = function() {
 		    for (var key = 0; key < allEnemies.length; key++) {
-	
+
                 if (allEnemies[key].loc[0] < player.loc[0] + 65 &&
                     allEnemies[key].loc[0] + 65 > player.loc[0] &&
                     allEnemies[key].loc[1] < player.loc[1] + 60 &&
                     allEnemies[key].loc[1] + 60 > player.loc[1]) {
-		            
+
 					reset();
 					player.score = 0;
 		        }
 			}
-			
+
 			for(var key = 0; key < gems.length; key++) {
-			
+
 			    if (gems[key].loc[0] < player.loc[0] + 65 &&
                     gems[key].loc[0] + 65 > player.loc[0] &&
                     gems[key].loc[1] < player.loc[1] + 60 &&
                     gems[key].loc[1] + 60 > player.loc[1]) {
-					
+
 					gems[key].loc = [-300, 100];
 					player.score += gems[key].points;
 				}
 			}
 		}();
-	}; 
+	};
 
     /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
@@ -130,7 +133,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-		
+
         player.update();
     }
 
@@ -172,9 +175,13 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-		
+
+        /* This two lines draws 2 white rectangles to make the Score and the Timer
+         * font drawing clear.
+         */
 		ctx.clearRect(295, 15, 180, 30);
 		ctx.clearRect(15, 10, 250, 30);
+
         renderEntities();
     }
 
@@ -191,7 +198,7 @@ var Engine = (function(global) {
         });
 
         player.render();
-		
+
 		gems.forEach(function(gem) {
 		    gem.render();
 		});
@@ -206,10 +213,10 @@ var Engine = (function(global) {
             element.loc = [-101, randomizer(3, 1) * 83 - 25];
 			element.speed = randomizer(3, 1) *100;
         });
-		
+
 		player.loc = [202, 404];
 		player.score += 10000;
-		
+
 		gemSpawn();
 		time = 30;
     }
