@@ -3,18 +3,23 @@
 // -------------------
 var Enemy = function() {
 
-    this.sprite = 'images/enemy-bug.png';          // Enemy image.
-    this.loc = [-101, randomizer(3, 1) * 83 - 25]; // Enemy location.
-    this.speed = randomizer(3, 1) *100;            // Enemy speed.
+    this.sprite = 'images/enemy-bug.png';
+    this.loc = [-101, randomizer(3, 1) * 83 - 25];
+    this.speed = randomizer(3, 1) *100;
 };
 
 // -------------------
 // Enemy prototype.
 // -------------------
-Enemy.prototype.update = function(dt) {            // Update.method() to change instances locations.
 
-    if (this.loc[0] < 505) {                       // This checks that enemy instances don't go away
-	    this.loc[0] += this.speed * dt;            // from the screen.
+/* Update.method() to change instances locations.
+ * This checks that enemy instances don't be gone
+ * away from the screen and beig recicled.
+ */
+Enemy.prototype.update = function(dt) {
+
+    if (this.loc[0] < 505) {
+	    this.loc[0] += this.speed * dt;
 
 	} else {
 	    this.loc = [-101, randomizer(3, 1) * 83 - 25];
@@ -22,9 +27,12 @@ Enemy.prototype.update = function(dt) {            // Update.method() to change 
 	};
 };
 
-Enemy.prototype.render = function() {              // Render.method() to display Enemy (and others) instances
+/* Render.method() to display Enemy (and others) instances
+ * and other information like score and timer.
+ */
+Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
-	ctx.fillStyle = "black";                       // and other information like score and timer.
+	ctx.fillStyle = "black";
 	ctx.font = "Bold 24px Helvetica";
     ctx.fillText("Score: " + player.score, 300, 35);
 	ctx.fillText("Time remain: " + time, 20, 35);
@@ -33,9 +41,13 @@ Enemy.prototype.render = function() {              // Render.method() to display
 // ------------------
 // Player class.
 // ------------------
+
+/* This an array of the eventual player skins,
+ * that user can change at the begining or when restart.
+ */
 var Player = function(key) {
-    character = {                                  // This an array of the eventual player skins,
-	    "Boy": 'images/char-boy.png',              // that user can change at the begining or when restart.
+    character = {
+	    "Boy": 'images/char-boy.png',
 		"Cat Girl": 'images/char-cat-girl.png',
 		"Horn Girl": 'images/char-horn-girl.png',
 		"Pink Girl": 'images/char-pink-girl.png',
