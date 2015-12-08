@@ -20,12 +20,12 @@ var Enemy = function() {
 Enemy.prototype.update = function(dt) {
 
     if (this.loc[0] < 505) {
-	    this.loc[0] += this.speed * dt;
+        this.loc[0] += this.speed * dt;
 
-	} else {
-	    this.loc = [-101, randomizer(3, 1) * 83 - 25];
+    } else {
+        this.loc = [-101, randomizer(3, 1) * 83 - 25];
         this.speed = randomizer(3, 1) * 100;
-	};
+    }
 };
 
 /* Render.method() to display Enemy (and others) instances
@@ -33,10 +33,10 @@ Enemy.prototype.update = function(dt) {
  */
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
-	ctx.fillStyle = "black";
-	ctx.font = "Bold 24px Helvetica";
+    ctx.fillStyle = "black";
+    ctx.font = "Bold 24px Helvetica";
     ctx.fillText("Score: " + player.score, 300, 35);
-	ctx.fillText("Time remain: " + time, 20, 35);
+    ctx.fillText("Time remain: " + time, 20, 35);
 };
 
 
@@ -48,40 +48,40 @@ Enemy.prototype.render = function() {
  * that user can change at the begining or when restart.
  */
 var Player = function(key) {
-    character = {
-	    "Boy": 'images/char-boy.png',
-		"Cat Girl": 'images/char-cat-girl.png',
-		"Horn Girl": 'images/char-horn-girl.png',
-		"Pink Girl": 'images/char-pink-girl.png',
-		"Princess": 'images/char-princess-girl.png'
-	};
+    var character = {
+        "Boy": 'images/char-boy.png',
+        "Cat Girl": 'images/char-cat-girl.png',
+        "Horn Girl": 'images/char-horn-girl.png',
+        "Pink Girl": 'images/char-pink-girl.png',
+        "Princess": 'images/char-princess-girl.png'
+    };
 
     /* This sets up the default skin when user clicks "cancel". */
-	if (key === null) {
-	    key = "Boy";
-	}
+    if (key === null) {
+        key = "Boy";
+    }
 
-	this.sprite = character[key];
+    this.sprite = character[key];
     this.loc = [202, 404];
-	
-	/* Initial score (the reset() function makes it equal 0 at the begining). */
-	this.score = -10000;
+
+    /* Initial score (the reset() function makes it equal 0 at the begining). */
+    this.score = -10000;
 
     this.update = function(x, y) {
-	
+
         /* This checks out values from the keyboard and handle them. */
         if (x !== undefined && y !== undefined) {
-		    this.loc[0] += x;
+            this.loc[0] += x;
             this.loc[1] += y;
 
-		} else return;
+        } else return;
     };
 
     this.render = Enemy.prototype.render;
 
     /* Player handleInput.method(). This serves to check whether
-	the Player instance went to the outside of the playing ground
-	and also handles input from the keyboard. */
+    the Player instance went to the outside of the playing ground
+    and also handles input from the keyboard. */
     this.handleInput = function(key) {
         if (key == "left" && this.loc[0] >= 101) {
             this.update(-101, 0);
@@ -99,8 +99,8 @@ var Player = function(key) {
             this.update(0, 83);
 
         } else {
-		    this.update(0, 0);
-		}
+            this.update(0, 0);
+        }
     };
 };
 
@@ -110,16 +110,16 @@ var Player = function(key) {
 // ------------------
 var Stuff = function(img) {
     var image = [
-	    'images/gem-blue.png',
-	    'images/gem-green.png',
-		'images/gem-orange.png',
-		'images/Heart.png',
-		'images/Key.png',
-		'images/Star.png',
-		'images/Rock.png'
-	];
+        'images/gem-blue.png',
+        'images/gem-green.png',
+        'images/gem-orange.png',
+        'images/Heart.png',
+        'images/Key.png',
+        'images/Star.png',
+        'images/Rock.png'
+    ];
 
-	this.sprite = image[img];
+    this.sprite = image[img];
 };
 
 
@@ -134,7 +134,7 @@ Stuff.prototype.locRandomizer = function() {
     x = randomizer(5, 0) * 101 - 505;
     y = randomizer(3, 1) * 83 - 25;
 
-	return this.loc = [x, y];
+    return this.loc = [x, y];
 };
 
 Stuff.prototype.render = Enemy.prototype.render;
@@ -146,8 +146,8 @@ Stuff.prototype.render = Enemy.prototype.render;
 
 var Gem = function(key) {
     Stuff.call(this, key);
-	this.points = (key + 1) * 2000;
-	this.locRandomizer();
+    this.points = (key + 1) * 2000;
+    this.locRandomizer();
 };
 
 Gem.prototype = Object.create(Stuff.prototype);
@@ -163,11 +163,11 @@ Gem.prototype.update = function() {
 
 var playerChoose = prompt("Wich character do you want to play - Boy, Cat Girl, Horn Girl, Pink Girl or Princess?", "Boy");
 
-var allEnemies = new Array(new Enemy(), new Enemy(), new Enemy(), new Enemy());
+var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
 var player = new Player(playerChoose);
 
-var gems = new Array(new Gem(0), new Gem(1), new Gem(2));
+var gems = [new Gem(0), new Gem(1), new Gem(2)];
 
 /* Global variable "time". To be accessible from the render.method(). */
 var time;
@@ -180,20 +180,20 @@ window.setInterval(timer, 1000);
 their locations such way they don't occupy the same position. */
 function gemSpawn () {
     gems.forEach(function(gem) {
-		gem.locRandomizer();
-	});
+        gem.locRandomizer();
+    });
 
     while (gems[0].loc[0] == gems[1].loc[0] ||
         gems[0].loc[0] == gems[2].loc[0] ||
         gems[1].loc[0] == gems[2].loc[0]) {
-		    gems[1].locRandomizer();
-			gems[2].locRandomizer();
-		}
+            gems[1].locRandomizer();
+            gems[2].locRandomizer();
+        }
 
-		/* And also it instantiates Gem's start locations. */
-		gems.forEach(function(gem) {
-			gem.update();
-		});
+        /* And also it instantiates Gem's start locations. */
+        gems.forEach(function(gem) {
+            gem.update();
+        });
 }
 
 /* Random value generator. */
