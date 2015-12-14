@@ -1,6 +1,11 @@
-﻿// -------------------
-// Enemy class.
-// -------------------
+﻿// ------------------
+// Enemy pseudo class.
+// ------------------
+
+/**
+ * Represents an Enemy.
+ * @constructor
+ */
 var Enemy = function() {
 
     this.sprite = 'images/enemy-bug.png';
@@ -8,14 +13,12 @@ var Enemy = function() {
     this.speed = randomizer(3, 1) *100;
 };
 
-
-// -------------------
-// Enemy prototype.
-// -------------------
-
-/* Update.method() to change instances locations.
- * This checks that enemy instances don't be gone
- * away from the screen and beig recicled.
+/**
+ * A method to change instances locations.
+ * This also checks that enemy instances don't be gone
+ * away from the screen and being recicled.
+ *
+ * @param {number} dt - The time delta used for smooth animation.
  */
 Enemy.prototype.update = function(dt) {
 
@@ -28,7 +31,8 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-/* Render.method() to display Enemy (and others) instances
+/**
+ * A method to display Enemies (and others) instances
  * and other information like score and timer.
  */
 Enemy.prototype.render = function() {
@@ -41,11 +45,14 @@ Enemy.prototype.render = function() {
 
 
 // ------------------
-// Player class.
+// Player pseudo class.
 // ------------------
 
-/* This an array of the eventual player skins,
- * that user can change at the begining or when restart.
+/**
+ * Represents a Player.
+ *
+ * @constructor
+ * @param {string} key - The character skin.
  */
 var Player = function(key) {
     var character = {
@@ -56,20 +63,27 @@ var Player = function(key) {
         "Princess": 'images/char-princess-girl.png'
     };
 
-    /* This sets up the default skin when user clicks "cancel". */
-    if (key === null) {
+    /* This sets up the default skin when it's not specified. */
+    if (key !== "Cat Girl" || "Horn Girl" || "Pink Girl" || "Princess") {
         key = "Boy";
     }
 
     this.sprite = character[key];
     this.loc = [202, 404];
 
-    /* Initial score (the reset() function makes it equal 0 at the begining). */
+    /* Initial score (the reset() inside the Engine function
+    makes it equals 0 at the begining). */
     this.score = -10000;
 
+    /**
+     * A method to change Player location.
+     *
+     * @param {number} x - Alteration ot the first coordinate.
+     * @param {number} y - Alteration ot the second coordinate.
+     */
     this.update = function(x, y) {
 
-        /* This checks out values from the keyboard and handle them. */
+        /* This checks out the values from a keyboard and handles them. */
         if (x !== undefined && y !== undefined) {
             this.loc[0] += x;
             this.loc[1] += y;
@@ -79,9 +93,13 @@ var Player = function(key) {
 
     this.render = Enemy.prototype.render;
 
-    /* Player handleInput.method(). This serves to check whether
-    the Player instance went to the outside of the playing ground
-    and also handles input from the keyboard. */
+    /**
+     * This method serves to check whether
+     * the Player instance went to the outside of the playing ground
+     * and also handles input from the keyboard.
+     *
+     * @param {string} key - The Player moving direction.
+     */
     this.handleInput = function(key) {
         if (key == "left" && this.loc[0] >= 101) {
             this.update(-101, 0);
@@ -106,8 +124,15 @@ var Player = function(key) {
 
 
 // ------------------
-// Stuff Super Pseudo Class.
+// Stuff Super pseudo class.
 // ------------------
+
+/**
+ * Represents any kind of game stuff.
+ *
+ * @constructor
+ * @param {string} img - The image of the stuff.
+ */
 var Stuff = function(img) {
     var image = [
         'images/gem-blue.png',
