@@ -18,7 +18,7 @@ var Enemy = function() {
  * This also checks that enemy instances don't be gone
  * away from the screen and being recicled.
  *
- * @param {number} dt - The time delta used for smooth animation.
+ * @param {number} dt - The time delta used for smooth animation (see main()).
  */
 Enemy.prototype.update = function(dt) {
 
@@ -52,7 +52,8 @@ Enemy.prototype.render = function() {
  * Represents a Player.
  *
  * @constructor
- * @param {string} key - The character skin.
+ * @param {string} key - The character skin name
+ * comes with the playerChoose variable.
  */
 var Player = function(key) {
     var character = {
@@ -63,7 +64,9 @@ var Player = function(key) {
         "Princess": 'images/char-princess-girl.png'
     };
 
-    /* This sets up the default skin when it's not specified. */
+    /**
+     * This sets up the default skin when it's not specified.
+     */
     if (key !== "Cat Girl" || "Horn Girl" || "Pink Girl" || "Princess") {
         key = "Boy";
     }
@@ -71,19 +74,25 @@ var Player = function(key) {
     this.sprite = character[key];
     this.loc = [202, 404];
 
-    /* Initial score (the reset() inside the Engine function
-    makes it equals 0 at the begining). */
+    /**
+     * Initial score (the reset() inside the Engine function
+     * makes it equals 0 at the begining).
+     */
     this.score = -10000;
 
     /**
      * A method to change Player location.
      *
-     * @param {number} x - Alteration ot the first coordinate.
-     * @param {number} y - Alteration ot the second coordinate.
+     * @param {number} x - Alteration ot the first coordinate comes from the
+     * this.handleInput().
+     * @param {number} y - Alteration ot the second coordinate comes from the
+     * this.handleInput().
      */
     this.update = function(x, y) {
 
-        /* This checks out the values from a keyboard and handles them. */
+        /**
+         * This checks out the values from a keyboard and handles them.
+         */
         if (x !== undefined && y !== undefined) {
             this.loc[0] += x;
             this.loc[1] += y;
@@ -98,7 +107,8 @@ var Player = function(key) {
      * the Player instance went to the outside of the playing ground
      * and also handles input from the keyboard.
      *
-     * @param {string} key - The Player moving direction.
+     * @param {string} key - The Player moving direction data comes from the
+     * keyboard event listener.
      */
     this.handleInput = function(key) {
         if (key == "left" && this.loc[0] >= 101) {
@@ -124,7 +134,7 @@ var Player = function(key) {
 
 
 // ------------------
-// Stuff Super pseudo class.
+// Stuff super pseudo class.
 // ------------------
 
 /**
@@ -147,13 +157,9 @@ var Stuff = function(img) {
     this.sprite = image[img];
 };
 
-
-// ------------------
-// Stuff Superclass Prototype.
-// ------------------
-
-/* locRandomizer.method() for the Stuff instances
-to "randomize' their locations. */
+/**
+ * This method randomizes locations of the Stuff instances.
+ */
 Stuff.prototype.locRandomizer = function() {
     var x, y;
     x = randomizer(5, 0) * 101 - 505;
@@ -166,9 +172,14 @@ Stuff.prototype.render = Enemy.prototype.render;
 
 
 // ------------------
-// Gem class.
+// Gem pseudo class.
 // ------------------
 
+/**
+ * Represents gems.
+ * @constructor
+ * @param {number} key - The order number of a gem.
+ */
 var Gem = function(key) {
     Stuff.call(this, key);
     this.points = (key + 1) * 2000;
@@ -187,23 +198,25 @@ Gem.prototype.update = function() {
 // ------------------
 
 var playerChoose = prompt("Wich character do you want to play - Boy, Cat Girl, Horn Girl, Pink Girl or Princess?", "Boy");
-
 var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
-
 var player = new Player(playerChoose);
-
 var gems = [new Gem(0), new Gem(1), new Gem(2)];
 
-/* Global variable "time". To be accessible from the render.method(). */
+/**
+ * This varable is used by the Enemy.render() to display game timer.
+ */
 var time;
-
-gemSpawn();
-
 window.setInterval(timer, 1000);
 
-/* This function parses through the array of gems and randomize
-their locations such way they don't occupy the same position. */
-function gemSpawn () {
+function timer() {
+    time -= 1;
+}
+
+/**
+ * This immediately-invoked function parses through the array of gems and randomizes
+ * their locations such way they don't occupy the same position.
+ */
+(function gemSpawn () {
     gems.forEach(function(gem) {
         gem.locRandomizer();
     });
@@ -215,20 +228,19 @@ function gemSpawn () {
             gems[2].locRandomizer();
         }
 
-        /* And also it instantiates Gem's start locations. */
+        /**
+         * And it also instantiates Gem's start locations.
+         */
         gems.forEach(function(gem) {
             gem.update();
         });
-}
+})();
 
-/* Random value generator. */
+/**
+ * Random value generator.
+ */
 function randomizer(i, j) {
     return ( Math.floor( Math.random() * i ) + j );
-}
-
-/* Timer function for the in-game timer. */
-function timer() {
-    time -= 1;
 }
 
 // This listens for key presses and sends the keys to your
