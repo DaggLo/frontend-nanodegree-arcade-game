@@ -1,4 +1,8 @@
-﻿// ------------------
+'use strict';
+
+
+
+// ------------------
 // Enemy pseudo class.
 // ------------------
 
@@ -14,11 +18,11 @@ var Enemy = function() {
 };
 
 /**
- * A method to change instances locations.
- * This also checks that enemy instances don't be gone
- * away from the screen and being recicled.
+ * A method that changes the instances locations.
+ * It also prevents enemy instances from being gone
+ * away from the screen and recicles them.
  *
- * @param {number} dt - The time delta used for smooth animation (see main()).
+ * @param {number} dt - Time delta used for smooth animation (see main() in the engine.js).
  */
 Enemy.prototype.update = function(dt) {
 
@@ -52,8 +56,7 @@ Enemy.prototype.render = function() {
  * Represents a Player.
  *
  * @constructor
- * @param {string} key - The character skin name
- * comes with the playerChoose variable.
+ * @param {string} key - The character skin name comes with the playerChoose variable.
  */
 var Player = function(key) {
     var character = {
