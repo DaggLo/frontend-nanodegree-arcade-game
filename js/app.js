@@ -1,5 +1,14 @@
 'use strict';
 
+// ------------------
+// Constants
+// ------------------
+
+/** Constants that specify dimensions of the enemies, player and collectibles.
+ * They are used to implement initial location and movements.
+ */
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
 
 
 // ------------------
@@ -13,7 +22,7 @@
 var Enemy = function() {
 
     this.sprite = 'images/enemy-bug.png';
-    this.loc = [-101, randomizer(3, 1) * 83 - 25];
+    this.loc = [-TILE_WIDTH, randomizer(3, 1) * TILE_HEIGHT - 25];
     this.speed = randomizer(3, 1) *100;
 };
 
@@ -26,11 +35,11 @@ var Enemy = function() {
  */
 Enemy.prototype.update = function(dt) {
 
-    if (this.loc[0] < 505) {
+    if (this.loc[0] < 5 * TILE_WIDTH) {
         this.loc[0] += this.speed * dt;
 
     } else {
-        this.loc = [-101, randomizer(3, 1) * 83 - 25];
+        this.loc = [-TILE_WIDTH, randomizer(3, 1) * TILE_HEIGHT - 25];
         this.speed = randomizer(3, 1) * 100;
     }
 };
@@ -86,15 +95,13 @@ var Player = function(key) {
     /**
      * A method to change Player location.
      *
-     * @param {number} x - Alteration ot the first coordinate comes from the
-     * this.handleInput().
-     * @param {number} y - Alteration ot the second coordinate comes from the
-     * this.handleInput().
+     * @param {number} x - Alteration ot the first coordinate comes from the this.handleInput().
+     * @param {number} y - Alteration ot the second coordinate comes from the this.handleInput().
      */
     this.update = function(x, y) {
 
         /**
-         * This checks out the values from a keyboard and handles them.
+         * This checks out values from a keyboard and handles them.
          */
         if (x !== undefined && y !== undefined) {
             this.loc[0] += x;
@@ -107,27 +114,27 @@ var Player = function(key) {
 
     /**
      * This method serves to check whether
-     * the Player instance went to the outside of the playing ground
+     * the Player instance went to outside of the playing ground
      * and also handles input from the keyboard.
      *
      * @param {string} key - The Player moving direction data comes from the
      * keyboard event listener.
      */
     this.handleInput = function(key) {
-        if (key == "left" && this.loc[0] >= 101) {
-            this.update(-101, 0);
+        if (key == "left" && this.loc[0] >= TILE_WIDTH) {
+            this.update(-TILE_WIDTH, 0);
         }
 
         if (key == "up" && this.loc[1] >= 50) {
-            this.update(0, -83);
+            this.update(0, -TILE_HEIGHT);
         }
 
-        if (key == "right" && this.loc[0] <= 303) {
-            this.update(101, 0);
+        if (key == "right" && this.loc[0] <= 3 * TILE_WIDTH) {
+            this.update(TILE_WIDTH, 0);
         }
 
         if (key == "down" && this.loc[1] <= 330) {
-            this.update(0, 83);
+            this.update(0, TILE_HEIGHT);
 
         } else {
             this.update(0, 0);
@@ -141,7 +148,7 @@ var Player = function(key) {
 // ------------------
 
 /**
- * Represents any kind of game stuff.
+ * Represents any kind of game stuff (except Enemis and Player).
  *
  * @constructor
  * @param {string} img - The image of the stuff.
