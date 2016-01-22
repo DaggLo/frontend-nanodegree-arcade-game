@@ -7,8 +7,8 @@
 /** Constants that specify dimensions of the enemies, player and collectibles.
  * They are used to implement initial location and movements.
  */
-var TILE_WIDTH = 101,
-    TILE_HEIGHT = 83;
+var TITLE_WIDTH = 101,
+    TITLE_HEIGHT = 83;
 
 
 // ------------------
@@ -22,7 +22,7 @@ var TILE_WIDTH = 101,
 var Enemy = function() {
 
     this.sprite = 'images/enemy-bug.png';
-    this.loc = [-TILE_WIDTH, randomizer(3, 1) * TILE_HEIGHT - 25];
+    this.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
     this.speed = randomizer(3, 1) *100;
 };
 
@@ -35,11 +35,11 @@ var Enemy = function() {
  */
 Enemy.prototype.update = function(dt) {
 
-    if (this.loc[0] < 5 * TILE_WIDTH) {
+    if (this.loc[0] < 5 * TITLE_WIDTH) {
         this.loc[0] += this.speed * dt;
 
     } else {
-        this.loc = [-TILE_WIDTH, randomizer(3, 1) * TILE_HEIGHT - 25];
+        this.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
         this.speed = randomizer(3, 1) * 100;
     }
 };
@@ -121,20 +121,20 @@ var Player = function(key) {
      * keyboard event listener.
      */
     this.handleInput = function(key) {
-        if (key == "left" && this.loc[0] >= TILE_WIDTH) {
-            this.update(-TILE_WIDTH, 0);
+        if (key == "left" && this.loc[0] >= TITLE_WIDTH) {
+            this.update(-TITLE_WIDTH, 0);
         }
 
         if (key == "up" && this.loc[1] >= 50) {
-            this.update(0, -TILE_HEIGHT);
+            this.update(0, -TITLE_HEIGHT);
         }
 
-        if (key == "right" && this.loc[0] <= 3 * TILE_WIDTH) {
-            this.update(TILE_WIDTH, 0);
+        if (key == "right" && this.loc[0] <= 3 * TITLE_WIDTH) {
+            this.update(TITLE_WIDTH, 0);
         }
 
         if (key == "down" && this.loc[1] <= 330) {
-            this.update(0, TILE_HEIGHT);
+            this.update(0, TITLE_HEIGHT);
 
         } else {
             this.update(0, 0);
