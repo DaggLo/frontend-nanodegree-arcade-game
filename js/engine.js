@@ -70,6 +70,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        startScreen();
         reset();
         lastTime = Date.now();
         main();
@@ -210,7 +211,7 @@ var Engine = (function(global) {
      */
     function reset() {
         allEnemies.forEach(function(element) {
-            element.loc = [-101, randomizer(3, 1) * 83 - 25];
+            element.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
 			element.speed = randomizer(3, 1) *100;
         });
 

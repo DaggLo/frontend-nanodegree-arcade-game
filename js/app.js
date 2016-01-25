@@ -4,11 +4,31 @@
 // Constants
 // ------------------
 
-/** Constants that specify dimensions of the enemies, player and collectibles.
- * They are used to implement initial location and movements.
+/**
+ * Constants that specify dimensions of the enemies, player and collectibles.
+ * They are used to implement initial locations and movements.
  */
 var TITLE_WIDTH = 101,
-    TITLE_HEIGHT = 83;
+    TITLE_HEIGHT = 83,
+
+    CHARACTERS_IMAGES = [
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png'
+    ],
+
+    STUFF_IMAGES = {
+        'blue gem': 'images/gem-blue.png',
+        'green gem': 'images/gem-green.png',
+        'orange gem': 'images/gem-orange.png',
+        'heart': 'images/Heart.png',
+        'key': 'images/Key.png',
+        'star': 'images/Star.png',
+        'rock': 'images/Rock.png',
+        'selector': 'images/Selector.png'
+    };
 
 
 // ------------------
@@ -68,13 +88,7 @@ Enemy.prototype.render = function() {
  * @param {string} key - The character skin name comes with the playerChoose variable.
  */
 var Player = function(key) {
-    var character = {
-        "Boy": 'images/char-boy.png',
-        "Cat Girl": 'images/char-cat-girl.png',
-        "Horn Girl": 'images/char-horn-girl.png',
-        "Pink Girl": 'images/char-pink-girl.png',
-        "Princess": 'images/char-princess-girl.png'
-    };
+
 
     /**
      * This sets up the default skin when it's not specified.
@@ -172,8 +186,8 @@ var Stuff = function(img) {
  */
 Stuff.prototype.locRandomizer = function() {
     var x, y;
-    x = randomizer(5, 0) * 101 - 505;
-    y = randomizer(3, 1) * 83 - 25;
+    x = randomizer(5, 0) * TITLE_WIDTH - 505;
+    y = randomizer(3, 1) * TITLE_HEIGHT - 25;
 
     return this.loc = [x, y];
 };
@@ -207,7 +221,8 @@ Gem.prototype.update = function() {
 // Instances and functions invoking.
 // ------------------
 
-var playerChoose = prompt("Wich character do you want to play - Boy, Cat Girl, Horn Girl, Pink Girl or Princess?", "Boy");
+var playerChoose = prompt('Wich character do you want to play - ' +
+    'Boy, Cat Girl, Horn Girl, Pink Girl or Princess?', 'Boy');
 var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 var player = new Player(playerChoose);
 var gems = [new Gem(0), new Gem(1), new Gem(2)];
@@ -223,10 +238,11 @@ function timer() {
 }
 
 /**
- * This immediately-invoked function parses through the array of gems and randomizes
- * their locations such way they don't occupy the same position.
+ * This function is called by the reset() function of the Engine.js,
+ * parses through the array of gems and randomizes their locations
+ * such way they don't occupy the same position.
  */
-(function gemSpawn () {
+function gemSpawn() {
     gems.forEach(function(gem) {
         gem.locRandomizer();
     });
@@ -238,13 +254,37 @@ function timer() {
             gems[2].locRandomizer();
         }
 
-        /**
-         * And it also instantiates Gem's start locations.
-         */
-        gems.forEach(function(gem) {
-            gem.update();
-        });
-})();
+    /**
+     * And it also instantiates Gem's start locations.
+     */
+    gems.forEach(function(gem) {
+        gem.update();
+    });
+}
+
+/**
+ *
+ */
+function startScreen() {
+    ctx.clearRect(0, 0, 505, 606);
+
+    ctx.font = '36px monospace';
+    ctx.textAlign = 'center';
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
+    ctx.globalAlpha = 1;
+    ctx.fillText('Ladybugger', 505 / 2, 110);
+    ctx.font = '18px monospace';
+    ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
+    ctx.font = '14px monospace';
+    ctx.fillText('hit [space] to start', 505 / 2, 550);
+    ctx.textAlign = 'left';
+
+    CHARACTERS_IMAGES.forEach(function(char,i) {
+        ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
+    });
+    ctx.drawImage(Resources.get(STUFF_IMAGES[selector]), TITLE_WIDTH * this.selected, 360);
+}
 
 /**
  * Random value generator.
