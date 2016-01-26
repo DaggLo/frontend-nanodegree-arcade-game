@@ -1,7 +1,7 @@
 'use strict';
 
 // ------------------
-// Constants
+// Constants.
 // ------------------
 
 /**
@@ -10,7 +10,6 @@
  */
 var TITLE_WIDTH = 101,
     TITLE_HEIGHT = 83,
-
     CHARACTERS_IMAGES = [
         'images/char-boy.png',
         'images/char-cat-girl.png',
@@ -18,7 +17,6 @@ var TITLE_WIDTH = 101,
         'images/char-pink-girl.png',
         'images/char-princess-girl.png'
     ],
-
     STUFF_IMAGES = {
         'blue gem': 'images/gem-blue.png',
         'green gem': 'images/gem-green.png',
@@ -28,7 +26,116 @@ var TITLE_WIDTH = 101,
         'star': 'images/Star.png',
         'rock': 'images/Rock.png',
         'selector': 'images/Selector.png'
+    },
+    NUMBER_OF_ENEMIES = 4,
+    NUMBER_OF_GEMS = 3;
+
+
+// ------------------
+// Common functions and global variables.
+// ------------------
+
+/**
+ * This varable is used by the Enemy.render() to display game timer.
+ */
+var allEnemies,
+    gems,
+    player,
+    playerChoose,
+    time;
+
+playerChoose = prompt('Wich character do you want to play - ' +
+    'Boy, Cat Girl, Horn Girl, Pink Girl or Princess?', 'Boy');
+
+allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
+
+player = new Player(playerChoose);
+
+gems = (function(i) {
+    var arr = [];
+
+    for (var j = 0; j < i; j++) {
+        arr.push(new Gem(j));
+    }
+
+
+
+    return arr;
+
+})(NUMBER_OF_GEMS);
+
+function timer() {
+    time -= 1;
+}
+
+/**
+ * This function is called by the reset() function of the Engine.js,
+ * parses through the array of gems and randomizes their locations
+ * such way they don't occupy the same position.
+ */
+function gemSpawn() {
+    gems.forEach(function(gem) {
+        gem.init();
+    });
+
+    while (gems[0].loc[0] == gems[1].loc[0] ||
+        gems[0].loc[0] == gems[2].loc[0] ||
+        gems[1].loc[0] == gems[2].loc[0]) {
+            gems[1].init();
+            gems[2].init();
+        }
+
+    /**
+     * And it also instantiates Gem's start locations.
+     */
+    gems.forEach(function(gem) {
+        gem.update();
+    });
+}
+
+/**
+ *
+ */
+function startScreen() {
+    ctx.clearRect(0, 0, 505, 606);
+
+    ctx.font = '36px monospace';
+    ctx.textAlign = 'center';
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
+    ctx.globalAlpha = 1;
+    ctx.fillText('Ladybugger', 505 / 2, 110);
+    ctx.font = '18px monospace';
+    ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
+    ctx.font = '14px monospace';
+    ctx.fillText('hit [space] to start', 505 / 2, 550);
+    ctx.textAlign = 'left';
+
+    CHARACTERS_IMAGES.forEach(function(char,i) {
+        ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
+    });
+    ctx.drawImage(Resources.get(STUFF_IMAGES[selector]), TITLE_WIDTH * this.selected, 360);
+}
+
+/**
+ * Random value generator.
+ */
+function randomizer(i, j) {
+    return ( Math.floor( Math.random() * i ) + j );
+}
+
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
+document.addEventListener('keyup', function(e) {
+    var allowedKeys = {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
     };
+
+    player.handleInput(allowedKeys[e.keyCode]);
+});
 
 
 // ------------------
@@ -184,7 +291,7 @@ var Stuff = function(img) {
 /**
  * This method randomizes locations of the Stuff instances.
  */
-Stuff.prototype.locRandomizer = function() {
+Stuff.prototype.init = function() {
     var x, y;
     x = randomizer(5, 0) * TITLE_WIDTH - 505;
     y = randomizer(3, 1) * TITLE_HEIGHT - 25;
@@ -207,7 +314,7 @@ Stuff.prototype.render = Enemy.prototype.render;
 var Gem = function(key) {
     Stuff.call(this, key);
     this.points = (key + 1) * 2000;
-    this.locRandomizer();
+    this.init();
 };
 
 Gem.prototype = Object.create(Stuff.prototype);
@@ -221,87 +328,6 @@ Gem.prototype.update = function() {
 // Instances and functions invoking.
 // ------------------
 
-var playerChoose = prompt('Wich character do you want to play - ' +
-    'Boy, Cat Girl, Horn Girl, Pink Girl or Princess?', 'Boy');
-var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
-var player = new Player(playerChoose);
-var gems = [new Gem(0), new Gem(1), new Gem(2)];
 
-/**
- * This varable is used by the Enemy.render() to display game timer.
- */
-var time;
+
 window.setInterval(timer, 1000);
-
-function timer() {
-    time -= 1;
-}
-
-/**
- * This function is called by the reset() function of the Engine.js,
- * parses through the array of gems and randomizes their locations
- * such way they don't occupy the same position.
- */
-function gemSpawn() {
-    gems.forEach(function(gem) {
-        gem.locRandomizer();
-    });
-
-    while (gems[0].loc[0] == gems[1].loc[0] ||
-        gems[0].loc[0] == gems[2].loc[0] ||
-        gems[1].loc[0] == gems[2].loc[0]) {
-            gems[1].locRandomizer();
-            gems[2].locRandomizer();
-        }
-
-    /**
-     * And it also instantiates Gem's start locations.
-     */
-    gems.forEach(function(gem) {
-        gem.update();
-    });
-}
-
-/**
- *
- */
-function startScreen() {
-    ctx.clearRect(0, 0, 505, 606);
-
-    ctx.font = '36px monospace';
-    ctx.textAlign = 'center';
-    ctx.globalAlpha = 0.5;
-    ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
-    ctx.globalAlpha = 1;
-    ctx.fillText('Ladybugger', 505 / 2, 110);
-    ctx.font = '18px monospace';
-    ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
-    ctx.font = '14px monospace';
-    ctx.fillText('hit [space] to start', 505 / 2, 550);
-    ctx.textAlign = 'left';
-
-    CHARACTERS_IMAGES.forEach(function(char,i) {
-        ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
-    });
-    ctx.drawImage(Resources.get(STUFF_IMAGES[selector]), TITLE_WIDTH * this.selected, 360);
-}
-
-/**
- * Random value generator.
- */
-function randomizer(i, j) {
-    return ( Math.floor( Math.random() * i ) + j );
-}
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-
-    player.handleInput(allowedKeys[e.keyCode]);
-});
