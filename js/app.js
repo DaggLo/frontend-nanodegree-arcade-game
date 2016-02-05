@@ -36,7 +36,7 @@ var TITLE_WIDTH = 101,
 // ------------------
 
 /**
- * This varable is used by the Enemy.render() to display game timer.
+ * This varables are used by the Enemy.render() to display game timer.
  */
 var allEnemies,
     gems,
@@ -51,18 +51,34 @@ allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
 player = new Player(playerChoose);
 
-gems = (function(i) {
-    var arr = [];
+gems = (function() {
+    var gemsArr = [];
 
-    for (var j = 0; j < i; j++) {
-        arr.push(new Gem(j));
+    for (var i = 0; i < NUMBER_OF_GEMS; i++) {
+        gemsArr.push(new Gem(j));
+
+        if (i == 0) continue;
+
+        for (var j = 0; j < i; j++) {
+
+            for (;;) {
+
+                if (gemsArr[j].loc[0] == gemsArr[i].loc[0]) {
+
+
+                    if (gemsArr[j].loc[1] == gemsArr[i].loc[1]) {
+                        gemsArr[j].init();
+
+                    } else break;
+
+                } else break;
+            }
+        }
     }
 
+    return gemsArr;
 
-
-    return arr;
-
-})(NUMBER_OF_GEMS);
+})();
 
 function timer() {
     time -= 1;
