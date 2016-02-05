@@ -47,38 +47,31 @@ var allEnemies,
 playerChoose = prompt('Wich character do you want to play - ' +
     'Boy, Cat Girl, Horn Girl, Pink Girl or Princess?', 'Boy');
 
-allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
+allEnemies = (function() {
+    var enemiesArr = [];
 
-player = new Player(playerChoose);
+    for (var i = 0; i < NUMBER_OF_ENEMIES; i++) {
+        enemiesArr.push(new Enemy());
+    }
+
+    return enemiesArr;
+})();
 
 gems = (function() {
     var gemsArr = [];
 
     for (var i = 0; i < NUMBER_OF_GEMS; i++) {
-        gemsArr.push(new Gem(j));
+        gemsArr.push(new Gem(i));
 
-        if (i == 0) continue;
-
-        for (var j = 0; j < i; j++) {
-
-            for (;;) {
-
-                if (gemsArr[j].loc[0] == gemsArr[i].loc[0]) {
-
-
-                    if (gemsArr[j].loc[1] == gemsArr[i].loc[1]) {
-                        gemsArr[j].init();
-
-                    } else break;
-
-                } else break;
-            }
-        }
+        if (i > 0) {
+            stuffRelocater(gemsArr[i], i, gemsArr);
+        } else continue;
     }
 
     return gemsArr;
-
 })();
+
+player = new Player(playerChoose);
 
 function timer() {
     time -= 1;
@@ -89,24 +82,29 @@ function timer() {
  * parses through the array of gems and randomizes their locations
  * such way they don't occupy the same position.
  */
-function gemSpawn() {
-    gems.forEach(function(gem) {
-        gem.init();
-    });
+function stuffRelocater(item, i, arr) {
 
-    while (gems[0].loc[0] == gems[1].loc[0] ||
-        gems[0].loc[0] == gems[2].loc[0] ||
-        gems[1].loc[0] == gems[2].loc[0]) {
-            gems[1].init();
-            gems[2].init();
+    for (var j = 0; j < i; j++) {
+
+        for (;;) {
+
+            if (arr[j].loc[0] == item.loc[0]) {
+
+                if (arr[j].loc[1] == item.loc[1]) {
+                    item.init();
+
+                } else break;
+
+            } else break;
         }
+    }
 
     /**
      * And it also instantiates Gem's start locations.
      */
-    gems.forEach(function(gem) {
-        gem.update();
-    });
+    // gems.forEach(function(gem) {
+    //     gem.update();
+    // });
 }
 
 /**
@@ -335,9 +333,9 @@ var Gem = function(key) {
 
 Gem.prototype = Object.create(Stuff.prototype);
 Gem.prototype.constructor = Gem;
-Gem.prototype.update = function() {
-    this.loc[0] += 505;
-};
+// Gem.prototype.update = function() {
+//     this.loc[0] += 505;
+// };
 
 
 // ------------------
