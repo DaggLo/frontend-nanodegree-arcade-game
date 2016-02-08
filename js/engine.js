@@ -218,7 +218,7 @@ var Engine = (function(global) {
 		player.loc = [202, 404];
 		player.score += 10000;
 
-		gems.forEach(stuffRelocater);
+		gems.forEach(stuffRelocator);
 		time = 30;
     }
 
