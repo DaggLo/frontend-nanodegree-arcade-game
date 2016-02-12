@@ -314,16 +314,7 @@ var Player = function(key) {
  * @param {string} img - The image of the stuff.
  */
 var Stuff = function(img) {
-    var image = [
-        'images/gem-blue.png',
-        'images/gem-green.png',
-        'images/gem-orange.png',
-        'images/Heart.png',
-        'images/Key.png',
-        'images/Star.png',
-        'images/Rock.png'
-    ];
-
+    var image = Object.keys(STUFF_IMAGES);
     this.sprite = image[img];
 };
 
@@ -351,8 +342,12 @@ Stuff.prototype.render = Enemy.prototype.render;
  * @param {number} key - The order number of a gem.
  */
 var Gem = function(key) {
-    Stuff.call(this, key);
+    if (key >= 3) {
+        key = randomizer(6, 0);
+    }
+
     this.points = (key + 1) * 2000;
+    Stuff.call(this, key);
     this.init();
 };
 
