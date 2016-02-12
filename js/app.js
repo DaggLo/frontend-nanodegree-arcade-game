@@ -343,7 +343,7 @@ Stuff.prototype.render = Enemy.prototype.render;
  */
 var Gem = function(key) {
     if (key >= 3) {
-        key = randomizer(6, 0);
+        key = randomizer(3, 0);
     }
 
     this.points = (key + 1) * 2000;
