@@ -137,7 +137,7 @@ function startScreen() {
         CHARACTERS_IMAGES.forEach(function(char,i) {
             ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
         });
-        ctx.drawImage(Resources.get(STUFF_IMAGES[selector]), TITLE_WIDTH * selectedCharacter, 360);
+        ctx.drawImage(Resources.get(STUFF_IMAGES['selector']), TITLE_WIDTH * selectedCharacter, 360);
     };
 
     var handleInput = function () {
