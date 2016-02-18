@@ -153,13 +153,12 @@ function startScreen() {
 
         if (input == "space") {
             player = new Player(selectedCharacter);
+            input = null;
             gameReadiness = true;
-            break;
-
-        } else continue;
+        }
     };
 
-    for (;;) {
+    while (!gameReadiness) {
         render();
         handleInput();
     }
