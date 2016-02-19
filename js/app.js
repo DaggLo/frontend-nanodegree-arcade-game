@@ -118,50 +118,49 @@ function stuffRelocator(item, i, arr) {
  *
  */
 function startScreen() {
+    if (!gameReadiness) {
 
-    var render = function () {
-        ctx.clearRect(0, 0, 505, 606);
+        var render = (function () {
+            ctx.clearRect(0, 0, 505, 606);
 
-        ctx.font = '36px monospace';
-        ctx.textAlign = 'center';
-        ctx.globalAlpha = 0.5;
-        ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
-        ctx.globalAlpha = 1;
-        ctx.fillText('Ladybugger', 505 / 2, 110);
-        ctx.font = '18px monospace';
-        ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
-        ctx.font = '14px monospace';
-        ctx.fillText('hit [space] to start', 505 / 2, 550);
-        ctx.textAlign = 'left';
+            ctx.font = '36px monospace';
+            ctx.textAlign = 'center';
+            ctx.globalAlpha = 0.5;
+            ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
+            ctx.globalAlpha = 1;
+            ctx.fillText('Ladybugger', 505 / 2, 110);
+            ctx.font = '18px monospace';
+            ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
+            ctx.font = '14px monospace';
+            ctx.fillText('hit [space] to start', 505 / 2, 550);
+            ctx.textAlign = 'left';
 
-        CHARACTERS_IMAGES.forEach(function(char,i) {
-            ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
-        });
-        ctx.drawImage(Resources.get(STUFF_IMAGES['selector']), TITLE_WIDTH * selectedCharacter, 360);
-    };
+            CHARACTERS_IMAGES.forEach(function(char,i) {
+                ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
+            });
+            ctx.drawImage(Resources.get(STUFF_IMAGES['selector']), TITLE_WIDTH * selectedCharacter, 360);
+        })();
 
-    var handleInput = function () {
-        if (input == "left" && selectedCharacter > 0) {
-            selectedCharacter--;
-            input = null;
-        }
+        var handleInput = (function () {
+            if (input == "left" && selectedCharacter > 0) {
+                selectedCharacter--;
+                input = null;
+            }
 
-        if (input == "right" && selectedCharacter < 4) {
-            selectedCharacter++;
-            input = null;
-        }
+            if (input == "right" && selectedCharacter < 4) {
+                selectedCharacter++;
+                input = null;
+            }
 
-        if (input == "space") {
-            player = new Player(selectedCharacter);
-            input = null;
-            gameReadiness = true;
-        }
-    };
-
-    while (!gameReadiness) {
-        render();
-        handleInput();
+            if (input == "space") {
+                player = new Player(selectedCharacter);
+                input = null;
+                gameReadiness = true;
+            }
+        })();
     }
+
+    window.requestAnimationFrame(startScreen);
 }
 
 // This listens for key presses and sends the keys to your
