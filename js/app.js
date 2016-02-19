@@ -32,12 +32,9 @@ var TITLE_WIDTH = 101,
 
 
 // ------------------
-// Common functions and global variables.
+// Global variables.
 // ------------------
 
-/**
- * This varables are used by the Enemy.render() to display game timer.
- */
 var allEnemies,
     gameReadiness = false,
     gems,
@@ -45,142 +42,6 @@ var allEnemies,
     player,
     selectedCharacter = 2,
     time;
-
-// playerChoose = prompt('Wich character do you want to play - ' +
-//     'Boy, Cat Girl, Horn Girl, Pink Girl or Princess?', 'Boy');
-
-allEnemies = (function() {
-    var enemiesArr = [];
-
-    for (var i = 0; i < NUMBER_OF_ENEMIES; i++) {
-        enemiesArr.push(new Enemy());
-    }
-
-    return enemiesArr;
-})();
-
-gems = (function() {
-    var gemsArr = [];
-
-    for (var i = 0; i < NUMBER_OF_GEMS; i++) {
-        gemsArr.push(new Gem(i));
-
-        if (i > 0) {
-            stuffRelocator(gemsArr[i], i, gemsArr);
-        } else continue;
-    }
-
-    return gemsArr;
-})();
-
-function timer() {
-    time -= 1;
-}
-
-/**
- * Random value generator.
- */
-function randomizer(i, j) {
-    return ( Math.floor( Math.random() * i ) + j );
-}
-
-/**
- * This function is called by the reset() function of the Engine.js,
- * parses through the array of gems and randomizes their locations
- * such way they don't occupy the same position.
- */
-function stuffRelocator(item, i, arr) {
-
-    for (var j = 0; j < i; j++) {
-
-        for (;;) {
-
-            if (arr[j].loc[0] == item.loc[0]) {
-
-                if (arr[j].loc[1] == item.loc[1]) {
-                    item.init();
-
-                } else break;
-
-            } else break;
-        }
-    }
-
-    /**
-     * And it also instantiates Gem's start locations.
-     */
-    // gems.forEach(function(gem) {
-    //     gem.update();
-    // });
-}
-
-/**
- *
- */
-function startScreen() {
-    if (!gameReadiness) {
-
-        var render = (function () {
-            ctx.clearRect(0, 0, 505, 606);
-
-            ctx.font = '36px monospace';
-            ctx.textAlign = 'center';
-            ctx.globalAlpha = 0.5;
-            ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
-            ctx.globalAlpha = 1;
-            ctx.fillText('Ladybugger', 505 / 2, 110);
-            ctx.font = '18px monospace';
-            ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
-            ctx.font = '14px monospace';
-            ctx.fillText('hit [space] to start', 505 / 2, 550);
-            ctx.textAlign = 'left';
-
-            CHARACTERS_IMAGES.forEach(function(char,i) {
-                ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
-            });
-            ctx.drawImage(Resources.get(STUFF_IMAGES['selector']), TITLE_WIDTH * selectedCharacter, 360);
-        })();
-
-        var handleInput = (function () {
-            if (input == "left" && selectedCharacter > 0) {
-                selectedCharacter--;
-                input = null;
-            }
-
-            if (input == "right" && selectedCharacter < 4) {
-                selectedCharacter++;
-                input = null;
-            }
-
-            if (input == "space") {
-                player = new Player(selectedCharacter);
-                input = null;
-                gameReadiness = true;
-            }
-        })();
-
-        window.requestAnimationFrame(startScreen);
-    }
-}
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        32: 'space',
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-
-    if (gameReadiness) {
-        player.handleInput(allowedKeys[e.keyCode]);
-
-    } else {
-        input = allowedKeys[e.keyCode];
-    }
-});
 
 
 // ------------------
@@ -355,11 +216,145 @@ Gem.prototype.constructor = Gem;
 //     this.loc[0] += 505;
 // };
 
-
 // ------------------
 // Instances and functions invoking.
 // ------------------
 
+allEnemies = (function() {
+    var enemiesArr = [];
 
+    for (var i = 0; i < NUMBER_OF_ENEMIES; i++) {
+        enemiesArr.push(new Enemy());
+    }
+
+    return enemiesArr;
+})();
+
+gems = (function() {
+    var gemsArr = [];
+
+    for (var i = 0; i < NUMBER_OF_GEMS; i++) {
+        gemsArr.push(new Gem(i));
+
+        if (i > 0) {
+            stuffRelocator(gemsArr[i], i, gemsArr);
+        } else continue;
+    }
+
+    return gemsArr;
+})();
 
 window.setInterval(timer, 1000);
+
+// ------------------
+// Common functions.
+// ------------------
+
+function timer() {
+    time -= 1;
+}
+
+/**
+ * Random value generator.
+ */
+function randomizer(i, j) {
+    return ( Math.floor( Math.random() * i ) + j );
+}
+
+/**
+ * This function is called by the reset() function of the Engine.js,
+ * parses through the array of gems and randomizes their locations
+ * such way they don't occupy the same position.
+ */
+function stuffRelocator(item, i, arr) {
+
+    for (var j = 0; j < i; j++) {
+
+        for (;;) {
+
+            if (arr[j].loc[0] == item.loc[0]) {
+
+                if (arr[j].loc[1] == item.loc[1]) {
+                    item.init();
+
+                } else break;
+
+            } else break;
+        }
+    }
+
+    /**
+     * And it also instantiates Gem's start locations.
+     */
+    // gems.forEach(function(gem) {
+    //     gem.update();
+    // });
+}
+
+/**
+ *
+ */
+function startScreen() {
+    if (!gameReadiness) {
+
+        var render = (function () {
+            ctx.clearRect(0, 0, 505, 606);
+
+            ctx.font = '36px monospace';
+            ctx.textAlign = 'center';
+            ctx.globalAlpha = 0.5;
+            ctx.drawImage(Resources.get('images/enemy-bug.png'), 292, -5);
+            ctx.globalAlpha = 1;
+            ctx.fillText('Ladybugger', 505 / 2, 110);
+            ctx.font = '18px monospace';
+            ctx.fillText('[<] select your hero [>]', 505 / 2, 300);
+            ctx.font = '14px monospace';
+            ctx.fillText('hit [space] to start', 505 / 2, 550);
+            ctx.textAlign = 'left';
+
+            CHARACTERS_IMAGES.forEach(function(char,i) {
+                ctx.drawImage(Resources.get(char), TITLE_WIDTH * i, 300);
+            });
+            ctx.drawImage(Resources.get(STUFF_IMAGES['selector']), TITLE_WIDTH * selectedCharacter, 360);
+        })();
+
+        var handleInput = (function () {
+            if (input == "left" && selectedCharacter > 0) {
+                selectedCharacter--;
+                input = null;
+            }
+
+            if (input == "right" && selectedCharacter < 4) {
+                selectedCharacter++;
+                input = null;
+            }
+
+            if (input == "space") {
+                player = new Player(selectedCharacter);
+                input = null;
+                gameReadiness = true;
+            }
+        })();
+
+        window.requestAnimationFrame(startScreen);
+    }
+}
+
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
+document.addEventListener('keyup', function(e) {
+    var allowedKeys = {
+        32: 'space',
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    };
+
+    if (gameReadiness) {
+        player.handleInput(allowedKeys[e.keyCode]);
+
+    } else {
+        input = allowedKeys[e.keyCode];
+    }
+});
