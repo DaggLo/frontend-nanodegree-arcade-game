@@ -158,9 +158,9 @@ function startScreen() {
                 gameReadiness = true;
             }
         })();
-    }
 
-    window.requestAnimationFrame(startScreen);
+        window.requestAnimationFrame(startScreen);
+    }
 }
 
 // This listens for key presses and sends the keys to your
