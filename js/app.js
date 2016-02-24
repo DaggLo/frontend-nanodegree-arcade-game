@@ -56,7 +56,7 @@ var Enemy = function() {
 
     this.sprite = 'images/enemy-bug.png';
     this.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
-    this.speed = randomizer(3, 1) *100;
+    this.speed = randomizer(3, 1) * 100;
 };
 
 /**
@@ -295,7 +295,7 @@ function stuffRelocator(item, i, arr) {
  *
  */
 function startScreen() {
-    if (!gameReadiness) {
+    // if (!gameReadiness) {
 
         var render = (function () {
             ctx.clearRect(0, 0, 505, 606);
@@ -336,8 +336,8 @@ function startScreen() {
             }
         })();
 
-        window.requestAnimationFrame(startScreen);
-    }
+        // window.requestAnimationFrame(startScreen);
+    // }
 }
 
 // This listens for key presses and sends the keys to your

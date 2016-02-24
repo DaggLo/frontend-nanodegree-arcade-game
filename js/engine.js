@@ -71,9 +71,14 @@ var Engine = (function(global) {
      */
     function init() {
         startScreen();
-        reset();
-        lastTime = Date.now();
-        main();
+
+        if (gameReadiness) {
+            reset();
+            lastTime = Date.now();
+            main();
+        } else {
+            window.requestAnimationFrame(init);
+        }
     }
 
     /* This function is called by main (our game loop) and itself calls all
