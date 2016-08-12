@@ -99,34 +99,32 @@ var Engine = (function(global) {
 
     updateEntities(dt);
 
-    /* This function checks collisions between player and enemies, player
+    /* These loops check collisions between player and enemies, player
      * and collectibles.
      */
-    var checkCollisions = function() {
-      for (var key = 0; key < allEnemies.length; key++) {
+    for (var key = 0; key < allEnemies.length; key++) {
 
-        if (allEnemies[key].loc[0] < player.loc[0] + 65 &&
-        allEnemies[key].loc[0] + 65 > player.loc[0] &&
-        allEnemies[key].loc[1] < player.loc[1] + 60 &&
-        allEnemies[key].loc[1] + 60 > player.loc[1]) {
+      if (allEnemies[key].loc[0] < player.loc[0] + 65 &&
+      allEnemies[key].loc[0] + 65 > player.loc[0] &&
+      allEnemies[key].loc[1] < player.loc[1] + 60 &&
+      allEnemies[key].loc[1] + 60 > player.loc[1]) {
 
-          reset();
-          player.score = 0;
-        }
+        reset();
+        player.score = 0;
       }
+    }
 
-      for (var key = 0; key < gems.length; key++) {
+    for (var key = 0; key < gems.length; key++) {
 
-        if (gems[key].loc[0] < player.loc[0] + 65 &&
-        gems[key].loc[0] + 65 > player.loc[0] &&
-        gems[key].loc[1] < player.loc[1] + 60 &&
-        gems[key].loc[1] + 60 > player.loc[1]) {
+      if (gems[key].loc[0] < player.loc[0] + 65 &&
+      gems[key].loc[0] + 65 > player.loc[0] &&
+      gems[key].loc[1] < player.loc[1] + 60 &&
+      gems[key].loc[1] + 60 > player.loc[1]) {
 
-          gems[key].loc = [-300, 100];
-          player.score += gems[key].points;
-        }
+        gems[key].loc = [-300, 100];
+        player.score += gems[key].points;
       }
-    }();
+    }
   };
 
   /* This is called by the update function  and loops through all of the
