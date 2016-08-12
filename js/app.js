@@ -174,7 +174,7 @@ var Player = function(key) {
  */
 var Stuff = function(img) {
     var image = Object.keys(STUFF_IMAGES);
-    this.sprite = image[img];
+    this.sprite = STUFF_IMAGES[image[img]];
 };
 
 /**
