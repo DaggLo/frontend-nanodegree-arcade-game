@@ -222,7 +222,13 @@ var Engine = (function(global) {
     player.loc = [202, 404];
     player.score += 10000;
 
-    gems.forEach(stuffRelocator);
+    // gems.forEach(stuffRelocator);
+    gems.forEach(function(element) {
+      element.init();
+      element.update();
+    });
+
+    for (var i = 0, )
     time = 30;
   }
 

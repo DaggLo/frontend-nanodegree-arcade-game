@@ -101,7 +101,6 @@ Enemy.prototype.render = function() {
  * @param {string} key - The character skin name comes with the playerChoose variable.
  */
 var Player = function(key) {
-
   this.sprite = CHARACTERS_IMAGES[key];
   this.loc = [202, 404];
 
@@ -118,7 +117,6 @@ var Player = function(key) {
    * @param {number} y - Alteration ot the second coordinate comes from the this.handleInput().
    */
   this.update = function(x, y) {
-
     /**
      * This checks out values from a keyboard and handles them.
      */
@@ -212,9 +210,9 @@ var Gem = function(key) {
 
 Gem.prototype = Object.create(Stuff.prototype);
 Gem.prototype.constructor = Gem;
-// Gem.prototype.update = function() {
-//     this.loc[0] += 505;
-// };
+Gem.prototype.update = function() {
+  this.loc[0] += 505;
+};
 
 // ------------------
 // Instances and functions invoking.
@@ -258,7 +256,7 @@ function timer() {
  * Random value generator.
  */
 function randomizer(i, j) {
-  return ( Math.floor( Math.random() * i ) + j );
+  return (Math.floor(Math.random() * i) + j);
 }
 
 /**
