@@ -10,25 +10,31 @@
  */
 var TITLE_WIDTH = 101,
 TITLE_HEIGHT = 83,
-CHARACTERS_IMAGES = [
-  'images/char-cat-girl.png',
-  'images/char-horn-girl.png',
-  'images/char-boy.png',
-  'images/char-pink-girl.png',
-  'images/char-princess-girl.png'
-],
 STUFF_IMAGES = {
-  'blue gem': 'images/gem-blue.png',
-  'green gem': 'images/gem-green.png',
-  'orange gem': 'images/gem-orange.png',
+  'gems': [
+    'images/gem-blue.png',
+    'images/gem-green.png',
+    'images/gem-orange.png'
+  ],
+  'characters': [
+    'images/char-cat-girl.png',
+    'images/char-horn-girl.png',
+    'images/char-boy.png',
+    'images/char-pink-girl.png',
+    'images/char-princess-girl.png'
+  ],
   'heart': 'images/Heart.png',
   'key': 'images/Key.png',
   'star': 'images/Star.png',
   'rock': 'images/Rock.png',
-  'selector': 'images/Selector.png'
+  'selector': 'images/Selector.png',
+  'bug': 'images/enemy-bug.png'
 },
-NUMBER_OF_ENEMIES = 4,
-NUMBER_OF_GEMS = 3;
+OPTIONS = {
+  'NUMBER_OF_ENEMIES' = 4,
+  'NUMBER_OF_GEMS' = 3,
+  'ENEMY_MAX_SPEED' = 3
+};
 
 
 // ------------------
@@ -36,12 +42,57 @@ NUMBER_OF_GEMS = 3;
 // ------------------
 
 var allEnemies,
-  gameReadiness = false,
-  gems,
-  input,
-  player,
-  selectedCharacter = 2,
-  time;
+gameReadiness = false,
+gems,
+input,
+player,
+selectedCharacter = 2,
+time;
+
+
+// ------------------
+// Stuff super pseudo class.
+// ------------------
+
+/**
+ * Represents everything (means Enemies, Player, Gems etc.).
+ *
+ * @constructor
+ * @param {string} img - A property name of the STUFF_IMAGES.
+ * @param {number} num - If a property is an object - the number of it's property.
+ */
+var Stuff = function(img, num) {
+  if (typeof STUFF_IMAGES[img] = 'string') {
+    this.sprite = STUFF_IMAGES[img];
+
+  } else {
+    this.sprite = STUFF_IMAGES[img][num];
+  }
+};
+
+/**
+ * This method randomizes locations of the Stuff instances.
+ */
+/* Stuff.prototype.init = function() {
+  var x, y;
+  x = randomizer(5, 0) * TITLE_WIDTH - 505;
+  y = randomizer(3, 1) * TITLE_HEIGHT - 25;
+
+  return this.loc = [x, y];
+}; */
+
+
+/**
+ * A method to display Stuff instances
+ * and other information like score and timer.
+ */
+Stuff.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
+  ctx.fillStyle = "black";
+  ctx.font = "Bold 24px Helvetica";
+  ctx.fillText("Score: " + player.score, 300, 35);
+  ctx.fillText("Time remain: " + time, 20, 35);
+};
 
 
 // ------------------
@@ -53,11 +104,14 @@ var allEnemies,
  * @constructor
  */
 var Enemy = function() {
+  Stuff.call(this, 'bug');
 
-  this.sprite = 'images/enemy-bug.png';
   this.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
   this.speed = randomizer(3, 1) * 100;
 };
+
+Enemy.prototype = Object.create(Stuff.prototype);
+Enemy.prototype.constructor = Enemy;
 
 /**
  * A method that changes the instances locations.
@@ -77,17 +131,7 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-/**
- * A method to display Enemies (and others) instances
- * and other information like score and timer.
- */
-Enemy.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.loc[0], this.loc[1]);
-  ctx.fillStyle = "black";
-  ctx.font = "Bold 24px Helvetica";
-  ctx.fillText("Score: " + player.score, 300, 35);
-  ctx.fillText("Time remain: " + time, 20, 35);
-};
+
 
 
 // ------------------
@@ -101,7 +145,7 @@ Enemy.prototype.render = function() {
  * @param {string} key - The character skin name comes with the playerChoose variable.
  */
 var Player = function(key) {
-  this.sprite = CHARACTERS_IMAGES[key];
+  Stuff.call(this, 'character', key);
   this.loc = [202, 404];
 
   /**
@@ -126,8 +170,6 @@ var Player = function(key) {
 
     } else return;
   };
-
-  this.render = Enemy.prototype.render;
 
   /**
    * This method serves to check whether
@@ -161,35 +203,6 @@ var Player = function(key) {
 
 
 // ------------------
-// Stuff super pseudo class.
-// ------------------
-
-/**
- * Represents any kind of game stuff (except Enemis and Player).
- *
- * @constructor
- * @param {string} img - The image of the stuff.
- */
-var Stuff = function(img) {
-  var image = Object.keys(STUFF_IMAGES);
-  this.sprite = STUFF_IMAGES[image[img]];
-};
-
-/**
- * This method randomizes locations of the Stuff instances.
- */
-Stuff.prototype.init = function() {
-  var x, y;
-  x = randomizer(5, 0) * TITLE_WIDTH - 505;
-  y = randomizer(3, 1) * TITLE_HEIGHT - 25;
-
-  return this.loc = [x, y];
-};
-
-Stuff.prototype.render = Enemy.prototype.render;
-
-
-// ------------------
 // Gem pseudo class.
 // ------------------
 
@@ -199,13 +212,16 @@ Stuff.prototype.render = Enemy.prototype.render;
  * @param {number} key - The order number of a gem.
  */
 var Gem = function(key) {
-  if (key >= 3) {
-    key = randomizer(3, 0);
+  if (key >= NUMBER_OF_GEMS) {
+    key = randomizer(NUMBER_OF_GEMS, 0);
   }
 
+  Stuff.call(this, 'gems', key);
   this.points = (key + 1) * 2000;
-  Stuff.call(this, key);
+
   this.init();
+  x = randomizer(5, 0) * TITLE_WIDTH - 505;
+  y = randomizer(3, 1) * TITLE_HEIGHT - 25;
 };
 
 Gem.prototype = Object.create(Stuff.prototype);
