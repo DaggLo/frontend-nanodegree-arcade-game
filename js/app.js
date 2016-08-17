@@ -31,9 +31,10 @@ STUFF_IMAGES = {
   'bug': 'images/enemy-bug.png'
 },
 OPTIONS = {
-  'NUMBER_OF_ENEMIES' = 4,
-  'NUMBER_OF_GEMS' = 3,
-  'ENEMY_MAX_SPEED' = 3
+  'NUMBER_OF_ENEMIES': 4,
+  'NUMBER_OF_GEMS': 3,
+  'ENEMY_MAX_SPEED': 3,
+  'GROUND_HEIGHT': 3
 };
 
 
@@ -106,8 +107,8 @@ Stuff.prototype.render = function() {
 var Enemy = function() {
   Stuff.call(this, 'bug');
 
-  this.loc = [-TITLE_WIDTH, randomizer(3, 1) * TITLE_HEIGHT - 25];
-  this.speed = randomizer(3, 1) * 100;
+  this.loc = [-TITLE_WIDTH, randomizer(OPTIONS[GROUND_HEIGHT], 1) * TITLE_HEIGHT - 25];
+  this.speed = randomizer(OPTIONS[ENEMY_MAX_SPEED], 1) * 100;
 };
 
 Enemy.prototype = Object.create(Stuff.prototype);
@@ -212,8 +213,8 @@ var Player = function(key) {
  * @param {number} key - The order number of a gem.
  */
 var Gem = function(key) {
-  if (key >= NUMBER_OF_GEMS) {
-    key = randomizer(NUMBER_OF_GEMS, 0);
+  if (key >= OPTIONS[NUMBER_OF_GEMS]) {
+    key = randomizer(OPTIONS[NUMBER_OF_GEMS], 0);
   }
 
   Stuff.call(this, 'gems', key);
@@ -237,7 +238,7 @@ Gem.prototype.update = function() {
 allEnemies = (function() {
   var enemiesArr = [];
 
-  for (var i = 0; i < NUMBER_OF_ENEMIES; i++) {
+  for (var i = 0; i < OPTIONS[NUMBER_OF_ENEMIES]; i++) {
     enemiesArr.push(new Enemy());
   }
 
@@ -247,7 +248,7 @@ allEnemies = (function() {
 gems = (function() {
   var gemsArr = [];
 
-  for (var i = 0; i < NUMBER_OF_GEMS; i++) {
+  for (var i = 0; i < OPTIONS[NUMBER_OF_GEMS]; i++) {
     gemsArr.push(new Gem(i));
 
     if (i > 0) {
